@@ -33,5 +33,5 @@ then `sudo systemctl restart nihongo-sync`.
 - `outils/devserver.py [port] [sync-port]`: serves `www/` and relays `/api/` to a local nihongo-sync.
 - `outils/ui_test.py [url] [screenshot-dir]`: end-to-end run in headless Chrome with a fake Japanese voice
   (lesson, review, chart, sync, profile switch, no-voice mode). Start from empty progress files.
-- `outils/icones.sh`: renders the home-screen icons into `www/img/` (not `icons/`: Apache aliases `/icons/` server-wide).
+- `outils/icones.sh`: renders the home-screen icons and the link preview `og.png` (Open Graph tags in `index.html`) into `www/img/` (not `icons/`: Apache aliases `/icons/` server-wide).
 - `outils/cdp.py`: minimal DevTools client used by the above (chrome-headless-shell, see `LD_LIBRARY_PATH` inside).
