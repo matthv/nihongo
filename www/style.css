@@ -271,3 +271,4 @@ details.intro summary { cursor: pointer; font-weight: 600; }
 .file { cursor: pointer; }
 .credits { text-align: center; margin-top: 24px; }
 .done .row { margin-top: 16px; }
+.cap { text-transform: capitalize; }

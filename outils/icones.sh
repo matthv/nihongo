@@ -9,7 +9,7 @@ from cdp import Browser
 www = os.path.abspath('../www')
 def page(size, pad):
     r = 0 if pad else size * 0.22
-    path = f'{www}/icons/_render.html'
+    path = f'{www}/img/_render.html'
     with open(path, 'w') as f:
         f.write(f'''<!doctype html><meta charset="utf-8"><style>
 @font-face{{font-family:K;src:url(../fonts/klee-one-600.woff2)}}
@@ -22,9 +22,9 @@ for name, size, pad in [('apple-touch-icon', 180, True), ('icon-192', 192, False
     try:
         b.ws.call('Emulation.setDefaultBackgroundColorOverride', color={'r': 0, 'g': 0, 'b': 0, 'a': 0})
         b.go(page(size, pad), wait=1)
-        b.shot(f'{www}/icons/{name}.png')
+        b.shot(f'{www}/img/{name}.png')
     finally:
         b.close()
-        os.remove(f'{www}/icons/_render.html')
+        os.remove(f'{www}/img/_render.html')
     print(name)
 PY

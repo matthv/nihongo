@@ -897,7 +897,7 @@ function viewSettings() {
     const time = sync.lastAt ? sync.lastAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
     el.innerHTML = {
       off: 'Désactivée : la progression reste sur cet appareil.',
-      ok: `<strong class="ok">Active</strong>${sync.user ? ` · profil <b>${esc(sync.user)}</b>` : ''}${time ? ` · synchronisé à ${time}` : ''}`,
+      ok: `<strong class="ok">Active</strong>${sync.user ? ` · profil <b class="cap">${esc(sync.user)}</b>` : ''}${time ? ` · synchronisé à ${time}` : ''}`,
       error: '<strong class="ko">Serveur injoignable</strong> pour l\'instant, nouvel essai à la prochaine réponse.',
       unauthorized: '<strong class="ko">Code refusé.</strong>',
     }[sync.status];
