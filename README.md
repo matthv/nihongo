@@ -12,7 +12,7 @@ Version 1 covers hiragana and katakana (24 lessons, about 220 kana and 230 words
   Reviews only move a card on its first answer of the session. A day counts toward the weekly goal at 10 answers.
 - Audio is the browser's speech synthesis (`ja-JP` voice). Single kana are spoken in katakana so は is read "ha".
   Without a Japanese voice the listening exercises are hidden and the home page explains how to install one.
-- Skins (`www/theme.js`, loaded in <head>): 5 palettes × auto/light/dark, stored in the synced state (`skin`, `mode`, `skinT`).
+- Skins (`www/theme.js`, loaded in <head>): 3 palettes (Sakura by default, Matcha, Indigo) × auto/light/dark, stored in the synced state (`skin`, `mode`, `skinT`).
 - Kana font: Klee One (Fontworks, OFL, `www/fonts/OFL.txt`), subset to kana only.
 
 ## Progress sync

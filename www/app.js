@@ -10,7 +10,7 @@ const PART_MAX = 8;
 // ---------- Storage ----------
 
 function defaults() {
-  return { epoch: 0, name: '', nameT: 0, goal: 4, goalT: 0, skin: 'neutre', mode: 'auto', skinT: 0, lessons: {}, cards: {}, days: {} };
+  return { epoch: 0, name: '', nameT: 0, goal: 4, goalT: 0, skin: 'sakura', mode: 'auto', skinT: 0, lessons: {}, cards: {}, days: {} };
 }
 
 function load() {
@@ -845,7 +845,7 @@ function viewSettings() {
 
     <div class="card">
       <h2>Apparence</h2>
-      <div class="skins">${SKINS.map(k => `<button type="button" class="skin ${k.id === state.skin ? 'on' : ''}" data-skin="${k.id}">
+      <div class="skins">${SKINS.map(k => `<button type="button" class="skin ${k.id === document.documentElement.dataset.skin ? 'on' : ''}" data-skin="${k.id}">
         <span class="swatch">${k.swatch.map(c => `<i style="background:${c}"></i>`).join('')}</span>${k.name}</button>`).join('')}</div>
       <div class="seg" role="group" aria-label="Mode">${[['auto', 'Auto'], ['light', 'Clair'], ['dark', 'Sombre']].map(([m, label]) =>
         `<button type="button" data-mode="${m}" class="${m === state.mode ? 'on' : ''}">${label}</button>`).join('')}</div>
