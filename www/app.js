@@ -578,8 +578,107 @@ function runQuiz(node, { entries, onAnswer, onDone, quitTo = '#/' }) {
   next();
 }
 
+// ---------- Stroke order ----------
+
+let strokesPromise = null;
+function loadStrokes() {
+  strokesPromise ||= fetch('strokes.json').then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).catch(e => { strokesPromise = null; throw e; });
+  return strokesPromise;
+}
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function strokeSvg(data) {
+  const svg = svgEl('svg', { viewBox: '0 0 109 109', class: 'strokes', 'aria-hidden': 'true' });
+  for (const d of ['M54.5 4V105', 'M4 54.5H105']) svg.append(svgEl('path', { d, class: 'guide' }));
+  const ghost = svgEl('g', { class: 'ghost' });
+  const ink = svgEl('g', { class: 'ink' });
+  const nums = svgEl('g', { class: 'nums' });
+  data.p.forEach((d, i) => {
+    ghost.append(svgEl('path', { d }));
+    ink.append(svgEl('path', { d }));
+    const t = svgEl('text', { x: data.n[i][0], y: data.n[i][1] });
+    t.textContent = i + 1;
+    nums.append(t);
+  });
+  svg.append(ghost, ink, nums);
+  return svg;
+}
+
+// Draws every stroke of every character in turn; numbers appear as their stroke starts.
+function animateStrokes(box) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let t = 200;
+  for (const svg of box.querySelectorAll('svg')) {
+    const paths = svg.querySelectorAll('.ink path');
+    const nums = svg.querySelectorAll('.nums text');
+    paths.forEach((p, i) => {
+      p.getAnimations().forEach(a => a.cancel());
+      nums[i].getAnimations().forEach(a => a.cancel());
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      const duration = reduce ? 1 : Math.max(280, len * 9);
+      p.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration, delay: reduce ? 0 : t, fill: 'both', easing: 'ease-in-out' });
+      nums[i].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150, delay: reduce ? 0 : t, fill: 'both' });
+      t += duration + 180;
+    });
+    t += 250;
+  }
+}
+
+async function showStrokes(item) {
+  let dlg = document.getElementById('draw');
+  if (!dlg) {
+    dlg = h(`<dialog id="draw" class="draw" aria-label="Comment l'écrire">
+      <div class="draw-head">
+        <span class="jp kana"></span><span class="ro"></span><span class="sound-slot"></span>
+        <button type="button" class="close" aria-label="Fermer">✕</button>
+      </div>
+      <div class="draw-box"></div>
+      <p class="note" hidden></p>
+      <div class="row"><button type="button" class="btn replay">Rejouer</button></div>
+    </dialog>`);
+    document.body.append(dlg);
+    dlg.querySelector('.close').addEventListener('click', () => dlg.close());
+    dlg.querySelector('.replay').addEventListener('click', () => animateStrokes(dlg.querySelector('.draw-box')));
+    // A tap on the backdrop lands on the dialog element itself.
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  }
+  dlg.querySelector('.kana').textContent = item.kana;
+  dlg.querySelector('.ro').textContent = item.ro;
+  dlg.querySelector('.sound-slot').innerHTML = soundButton(item);
+  const note = dlg.querySelector('.note');
+  note.textContent = item.note || '';
+  note.hidden = !item.note;
+  const box = dlg.querySelector('.draw-box');
+  box.replaceChildren();
+  if (!dlg.open) dlg.showModal();
+  say(item);
+  try {
+    const data = await loadStrokes();
+    box.replaceChildren(...[...item.kana].filter(c => data[c]).map(c => strokeSvg(data[c])));
+    box.classList.toggle('pair', item.kana.length > 1);
+    animateStrokes(box);
+  } catch {
+    box.innerHTML = '<p class="small">Tracé indisponible pour l\'instant.</p>';
+  }
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-draw]');
+  if (b && !e.target.closest('[data-say]')) { e.preventDefault(); showStrokes(ITEMS.get(b.dataset.draw)); }
+});
+
 function itemRow(item) {
-  return `<li class="item">
+  return `<li class="item" ${item.type === 'kana' ? `data-draw="${esc(item.id)}"` : ''}>
     <span class="jp kana">${esc(item.kana)}</span>
     <span class="ro">${esc(item.ro)}</span>
     ${item.meaning ? `<span class="fr">${esc(item.meaning)}</span>` : ''}
@@ -711,13 +810,11 @@ function viewLesson(id) {
     <div class="actions">
       ${finished
         ? `<a class="btn" href="#/entrainement/${lesson.id}">S'entraîner sur cette leçon</a><p class="small">L'entraînement ne change pas tes révisions.</p>`
-        : `<button class="btn start">C'est parti</button><p class="small">${tts.available ? 'Touche un kana pour l\'entendre, puis lance les exercices.' : ''}</p>`}
+        : `<button class="btn start">C'est parti</button><p class="small">Touche un kana pour voir comment il s'écrit${tts.available ? ' et l\'entendre' : ''}, puis lance les exercices.</p>`}
     </div>
   </div>`);
   // Tapping the whole tile plays it: bigger target on a phone than the speaker icon.
-  node.querySelectorAll('.cards .item').forEach(li => li.addEventListener('click', e => {
-    if (!e.target.closest('[data-say]')) say(ITEMS.get(li.querySelector('[data-say]')?.dataset.say || ''));
-  }));
+
   node.querySelector('.start')?.addEventListener('click', () => learnPart(lesson, done));
   setView(node, 'home');
 }
@@ -801,7 +898,7 @@ function viewChart(script = 'hira') {
     const kana = conv(k);
     const item = ITEMS.get('k:' + kana);
     const known = item && state.cards[item.id];
-    return `<button type="button" class="cell ${known ? 'known' : ''}" ${item && tts.available ? `data-say="${esc(item.id)}"` : ''}>
+    return `<button type="button" class="cell ${known ? 'known' : ''}" data-draw="${esc(item.id)}">
       <span class="jp">${esc(kana)}</span><span class="ro">${esc(romaji(kana))}</span></button>`;
   };
   const grid = (rows, size) => `<div class="grid g${size}">${rows.map(r =>
@@ -809,7 +906,7 @@ function viewChart(script = 'hira') {
   const extra = script === 'kata'
     ? `<h2 class="section">Sons étrangers</h2><div class="grid g4">${['ファ', 'フィ', 'フェ', 'フォ', 'ティ', 'ディ', 'チェ', 'シェ', 'ジェ', 'ウィ', 'ウェ', 'ウォ'].map(k => {
       const item = ITEMS.get('k:' + k);
-      return `<button type="button" class="cell ${state.cards[item.id] ? 'known' : ''}" ${tts.available ? `data-say="${esc(item.id)}"` : ''}><span class="jp">${k}</span><span class="ro">${esc(item.ro)}</span></button>`;
+      return `<button type="button" class="cell ${state.cards[item.id] ? 'known' : ''}" data-draw="${esc(item.id)}"><span class="jp">${k}</span><span class="ro">${esc(item.ro)}</span></button>`;
     }).join('')}</div>`
     : '';
   setView(h(`<div>
@@ -818,7 +915,7 @@ function viewChart(script = 'hira') {
       <a href="#/tableau" class="${script === 'hira' ? 'on' : ''}">Hiragana</a>
       <a href="#/tableau/katakana" class="${script === 'kata' ? 'on' : ''}">Katakana</a>
     </div>
-    <p class="small">En couleur : les kana déjà appris.${tts.available ? ' Touche un kana pour l\'entendre.' : ''}</p>
+    <p class="small">En couleur : les kana déjà appris. Touche un kana pour voir comment il s'écrit${tts.available ? ' et l\'entendre' : ''}.</p>
     ${grid(CHART.base, 5)}
     <h2 class="section">Avec <span class="jp">゛</span> et <span class="jp">゜</span></h2>
     ${grid(CHART.voiced, 5)}
@@ -887,7 +984,8 @@ function viewSettings() {
         <button class="btn danger" id="reset">Tout effacer</button>
       </div>
     </div>
-    <p class="small credits">Police des kana : Klee One (Fontworks, licence OFL).</p>
+    <p class="small credits">Police des kana : Klee One (Fontworks, licence OFL).<br>
+      Ordre des traits : <a href="https://kanjivg.tagaini.net" target="_blank" rel="noopener">KanjiVG</a> (Ulrich Apel, licence CC BY-SA 3.0).</p>
   </div>`);
 
   node.querySelector('#name').addEventListener('change', e => {

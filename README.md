@@ -13,6 +13,7 @@ Version 1 covers hiragana and katakana (24 lessons, about 220 kana and 230 words
 - Audio is the browser's speech synthesis (`ja-JP` voice). Single kana are spoken in katakana so は is read "ha".
   Without a Japanese voice the listening exercises are hidden and the home page explains how to install one.
 - Skins (`www/theme.js`, loaded in <head>): 3 palettes (Sakura by default, Matcha, Indigo) × auto/light/dark, stored in the synced state (`skin`, `mode`, `skinT`).
+- Stroke order: tapping a kana (chart, lesson tiles) opens a dialog that animates its strokes; data in `www/strokes.json`, built by `outils/kanjivg.py` from KanjiVG (CC BY-SA 3.0, credited in Réglages).
 - Kana font: Klee One (Fontworks, OFL, `www/fonts/OFL.txt`), subset to kana only.
 
 ## Progress sync
