@@ -12,42 +12,42 @@
 }
 
 :root {
-  --bg: #faf7f2;
+  --bg: #f5f6f8;
   --surface: #ffffff;
-  --surface-2: #f2ede4;
-  --text: #2a2520;
-  --muted: #74695d;
-  --border: #e3dbcf;
+  --surface-2: #eef0f3;
+  --text: #1d2127;
+  --muted: #5f6773;
+  --border: #dde1e6;
   --accent: #2c4f7c;
   --accent-soft: #e4ebf4;
   --shu: #c8402f;
-  --shu-soft: #f8e4de;
+  --shu-soft: #fdece9;
   --ok: #2e7d4f;
   --ok-soft: #e2f1e7;
   --ko: #b3261e;
   --ko-soft: #fbe5e2;
-  --warn-soft: #fbf1d6;
+  --warn-soft: #fdf5dc;
   --radius: 14px;
   --jp: "Klee", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #16130f;
-    --surface: #201c17;
-    --surface-2: #2a251f;
-    --text: #eee7dc;
-    --muted: #a99d8e;
-    --border: #3a332b;
+    --bg: #111315;
+    --surface: #1a1d21;
+    --surface-2: #25292e;
+    --text: #e8eaed;
+    --muted: #9aa1ab;
+    --border: #30353b;
     --accent: #8db3e2;
     --accent-soft: #1f2c3d;
     --shu: #e8644f;
-    --shu-soft: #3a1f19;
+    --shu-soft: #3a1d19;
     --ok: #5cc98a;
     --ok-soft: #173123;
     --ko: #f0796b;
     --ko-soft: #3b1c18;
-    --warn-soft: #362d14;
+    --warn-soft: #352e15;
     color-scheme: dark;
   }
 }
