@@ -11,6 +11,23 @@
   font-display: swap;
 }
 
+/* Skins: theme.js sets data-skin and data-mode on <html> before the first paint. */
+:root {
+  --ok: #2e7d4f;
+  --ok-soft: #e2f1e7;
+  --ko: #b3261e;
+  --ko-soft: #fbe5e2;
+  --on-accent: #ffffff;
+  --radius: 14px;
+  --jp: "Klee", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+}
+:root[data-mode="dark"] {
+  --ok: #5cc98a;
+  --ok-soft: #173123;
+  --ko: #f0796b;
+  --ko-soft: #3b1c18;
+  --on-accent: #10141a;
+}
 :root {
   --bg: #f5f6f8;
   --surface: #ffffff;
@@ -22,34 +39,124 @@
   --accent-soft: #e4ebf4;
   --shu: #c8402f;
   --shu-soft: #fdece9;
-  --ok: #2e7d4f;
-  --ok-soft: #e2f1e7;
-  --ko: #b3261e;
-  --ko-soft: #fbe5e2;
-  --warn-soft: #fdf5dc;
-  --radius: 14px;
-  --jp: "Klee", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #111315;
-    --surface: #1a1d21;
-    --surface-2: #25292e;
-    --text: #e8eaed;
-    --muted: #9aa1ab;
-    --border: #30353b;
-    --accent: #8db3e2;
-    --accent-soft: #1f2c3d;
-    --shu: #e8644f;
-    --shu-soft: #3a1d19;
-    --ok: #5cc98a;
-    --ok-soft: #173123;
-    --ko: #f0796b;
-    --ko-soft: #3b1c18;
-    --warn-soft: #352e15;
-    color-scheme: dark;
-  }
+:root[data-mode="dark"] {
+  --bg: #111315;
+  --surface: #1a1d21;
+  --surface-2: #25292e;
+  --text: #e8eaed;
+  --muted: #9aa1ab;
+  --border: #30353b;
+  --accent: #8db3e2;
+  --accent-soft: #1f2c3d;
+  --shu: #e8644f;
+  --shu-soft: #3a1d19;
+  color-scheme: dark;
+}
+:root[data-skin="papier"] {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --surface-2: #f2ede4;
+  --text: #2a2520;
+  --muted: #74695d;
+  --border: #e3dbcf;
+  --accent: #2c4f7c;
+  --accent-soft: #e4ebf4;
+  --shu: #c8402f;
+  --shu-soft: #f8e4de;
+  color-scheme: light;
+}
+:root[data-skin="papier"][data-mode="dark"] {
+  --bg: #16130f;
+  --surface: #201c17;
+  --surface-2: #2a251f;
+  --text: #eee7dc;
+  --muted: #a99d8e;
+  --border: #3a332b;
+  --accent: #8db3e2;
+  --accent-soft: #1f2c3d;
+  --shu: #e8644f;
+  --shu-soft: #3a1f19;
+  color-scheme: dark;
+}
+:root[data-skin="sakura"] {
+  --bg: #fbf5f7;
+  --surface: #ffffff;
+  --surface-2: #f6e8ee;
+  --text: #2b1f25;
+  --muted: #7a6670;
+  --border: #ecd9e1;
+  --accent: #a33e6c;
+  --accent-soft: #f6e3ec;
+  --shu: #e0607e;
+  --shu-soft: #fbe4ea;
+  color-scheme: light;
+}
+:root[data-skin="sakura"][data-mode="dark"] {
+  --bg: #171114;
+  --surface: #211a1e;
+  --surface-2: #2c2328;
+  --text: #f1e6ea;
+  --muted: #b29ca6;
+  --border: #3d3036;
+  --accent: #f09ab9;
+  --accent-soft: #3a2430;
+  --shu: #f07894;
+  --shu-soft: #3c1d26;
+  color-scheme: dark;
+}
+:root[data-skin="matcha"] {
+  --bg: #f4f7f2;
+  --surface: #ffffff;
+  --surface-2: #e9efe5;
+  --text: #1e261c;
+  --muted: #5f6b5a;
+  --border: #d9e2d3;
+  --accent: #3d6b35;
+  --accent-soft: #e3eedf;
+  --shu: #7a9a2e;
+  --shu-soft: #edf3dc;
+  color-scheme: light;
+}
+:root[data-skin="matcha"][data-mode="dark"] {
+  --bg: #101410;
+  --surface: #181e17;
+  --surface-2: #222a20;
+  --text: #e5ece2;
+  --muted: #9aa894;
+  --border: #2e382b;
+  --accent: #9ccc8a;
+  --accent-soft: #1f2d1c;
+  --shu: #a8c95a;
+  --shu-soft: #26301a;
+  color-scheme: dark;
+}
+:root[data-skin="indigo"] {
+  --bg: #f3f5fb;
+  --surface: #ffffff;
+  --surface-2: #e8ecf6;
+  --text: #1a2033;
+  --muted: #5b6480;
+  --border: #d8deec;
+  --accent: #3a4fa0;
+  --accent-soft: #e2e7f7;
+  --shu: #c8402f;
+  --shu-soft: #fbe6e2;
+  color-scheme: light;
+}
+:root[data-skin="indigo"][data-mode="dark"] {
+  --bg: #0e1120;
+  --surface: #161a2d;
+  --surface-2: #20253b;
+  --text: #e6e9f5;
+  --muted: #9aa2c0;
+  --border: #2c3350;
+  --accent: #9aa8f0;
+  --accent-soft: #1f2647;
+  --shu: #ef6a55;
+  --shu-soft: #3a1f22;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -89,7 +196,7 @@ nav a {
   font-size: .93rem; white-space: nowrap; display: flex; align-items: center; gap: 4px;
 }
 nav a.active { background: var(--surface-2); color: var(--text); font-weight: 600; }
-.badge { background: var(--shu); color: #fff; border-radius: 999px; font-size: .72rem; padding: 0 6px; min-width: 18px; text-align: center; font-weight: 700; }
+.badge { background: var(--shu); color: var(--on-accent); border-radius: 999px; font-size: .72rem; padding: 0 6px; min-width: 18px; text-align: center; font-weight: 700; }
 @media (max-width: 460px) {
   .brand span { display: none; }
   nav a { padding: 6px 8px; font-size: .9rem; }
@@ -105,13 +212,14 @@ main { max-width: 640px; margin: 0 auto; padding: 16px 16px 48px; outline: none;
 }
 .card p { margin: .3rem 0 .7rem; }
 .card.primary { border-color: color-mix(in srgb, var(--shu) 45%, var(--border)); box-shadow: 0 1px 0 var(--border), inset 4px 0 0 var(--shu); }
-.card.warn { background: var(--warn-soft); }
+.card.warn { background: var(--accent-soft); border-color: transparent; box-shadow: inset 4px 0 0 var(--accent); }
+.card.warn p:first-child { margin-top: 0; }
+.card.warn p:last-child { margin-bottom: 0; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid transparent;
-  background: var(--accent); color: #fff; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+  background: var(--accent); color: var(--on-accent); font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.ghost):not(.danger) { color: #10141a; } }
 .btn.ghost { background: transparent; color: var(--accent); border-color: var(--border); }
 .btn.danger { background: transparent; color: var(--ko); border-color: color-mix(in srgb, var(--ko) 40%, var(--border)); }
 .btn:disabled { opacity: .5; cursor: default; }
@@ -150,9 +258,9 @@ main { max-width: 640px; margin: 0 auto; padding: 16px 16px 48px; outline: none;
 }
 .lesson .num { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; background: var(--surface-2); color: var(--muted); font-weight: 700; }
 .lesson .k { font-size: 1.15rem; color: var(--muted); letter-spacing: .05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 45vw; }
-.lesson.done .num { background: var(--ok); color: #fff; }
+.lesson.done .num { background: var(--ok); color: var(--on-accent); }
 .lesson.current > a { border-color: var(--shu); }
-.lesson.current .num { background: var(--shu); color: #fff; }
+.lesson.current .num { background: var(--shu); color: var(--on-accent); }
 .lesson.locked { opacity: .5; }
 
 /* ---------- Lesson ---------- */
@@ -272,3 +380,15 @@ details.intro summary { cursor: pointer; font-weight: 600; }
 .credits { text-align: center; margin-top: 24px; }
 .done .row { margin-top: 16px; }
 .cap { text-transform: capitalize; }
+
+.skins { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin: 8px 0 12px; }
+.skin {
+  display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 12px; cursor: pointer;
+  border: 2px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: .88rem;
+}
+.skin.on { border-color: var(--accent); font-weight: 700; }
+.swatch { display: flex; width: 56px; height: 24px; border-radius: 999px; overflow: hidden; border: 1px solid rgba(0, 0, 0, .12); }
+.swatch i { flex: 1; }
+.seg { display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 3px; }
+.seg button { border: none; background: none; font: inherit; font-weight: 600; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 36px; }
+.seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0, 0, 0, .1); }

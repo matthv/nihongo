@@ -10,7 +10,7 @@ const PART_MAX = 8;
 // ---------- Storage ----------
 
 function defaults() {
-  return { epoch: 0, name: '', nameT: 0, goal: 4, goalT: 0, lessons: {}, cards: {}, days: {} };
+  return { epoch: 0, name: '', nameT: 0, goal: 4, goalT: 0, skin: 'neutre', mode: 'auto', skinT: 0, lessons: {}, cards: {}, days: {} };
 }
 
 function load() {
@@ -57,7 +57,11 @@ function merge(a, b) {
   }
   const n = newer(a, b, 'nameT');
   const g = newer(a, b, 'goalT');
-  const out = { ...defaults(), epoch: a.epoch, name: n.name, nameT: n.nameT, goal: g.goal, goalT: g.goalT };
+  const sk = newer(a, b, 'skinT');
+  const out = {
+    ...defaults(), epoch: a.epoch, name: n.name, nameT: n.nameT, goal: g.goal, goalT: g.goalT,
+    skin: sk.skin, mode: sk.mode, skinT: sk.skinT,
+  };
   for (const id of new Set([...Object.keys(a.lessons), ...Object.keys(b.lessons)])) {
     out.lessons[id] = { parts: Math.max(a.lessons[id]?.parts || 0, b.lessons[id]?.parts || 0) };
   }
@@ -840,6 +844,15 @@ function viewSettings() {
     </div>
 
     <div class="card">
+      <h2>Apparence</h2>
+      <div class="skins">${SKINS.map(k => `<button type="button" class="skin ${k.id === state.skin ? 'on' : ''}" data-skin="${k.id}">
+        <span class="swatch">${k.swatch.map(c => `<i style="background:${c}"></i>`).join('')}</span>${k.name}</button>`).join('')}</div>
+      <div class="seg" role="group" aria-label="Mode">${[['auto', 'Auto'], ['light', 'Clair'], ['dark', 'Sombre']].map(([m, label]) =>
+        `<button type="button" data-mode="${m}" class="${m === state.mode ? 'on' : ''}">${label}</button>`).join('')}</div>
+      <p class="small">Auto suit le réglage de l'appareil. Le thème suit ton profil sur tous tes appareils.</p>
+    </div>
+
+    <div class="card">
       <h2>Audio</h2>
       ${voices.length ? `
         <label class="field">Voix
@@ -887,6 +900,17 @@ function viewSettings() {
     state.goalT = Date.now();
     save();
   });
+  const setTheme = (skin, mode) => {
+    state.skin = skin;
+    state.mode = mode;
+    state.skinT = Date.now();
+    save();
+    applyTheme(skin, mode);
+    node.querySelectorAll('.skin').forEach(b => b.classList.toggle('on', b.dataset.skin === skin));
+    node.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  };
+  node.querySelectorAll('.skin').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.skin, state.mode)));
+  node.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => setTheme(state.skin, b.dataset.mode)));
   node.querySelector('#voice')?.addEventListener('change', e => { prefs.voice = e.target.value; savePrefs(); tts.speak('こんにちは'); });
   node.querySelector('#slow')?.addEventListener('change', e => { prefs.slow = e.target.checked; savePrefs(); });
   node.querySelector('#listen')?.addEventListener('change', e => { prefs.listen = e.target.checked; savePrefs(); });
@@ -923,7 +947,7 @@ function viewSettings() {
     sync.setToken(code);
     await sync.pull();
     renderSync();
-    if (sync.status === 'ok') { node.querySelector('#name').value = state.name; updateBadge(); }
+    if (sync.status === 'ok') { node.querySelector('#name').value = state.name; updateBadge(); applyTheme(state.skin, state.mode); }
   });
 
   node.querySelector('#export').addEventListener('click', () => {
@@ -966,6 +990,7 @@ function viewNotFound() {
 function route() {
   const path = location.hash.replace(/^#\/?/, '');
   let m;
+  applyTheme(state.skin, state.mode);
   updateBadge();
   if (path === '') viewHome();
   else if (path === 'revision') viewReview();
