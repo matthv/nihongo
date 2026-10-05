@@ -329,7 +329,7 @@ details.intro summary { cursor: pointer; font-weight: 600; }
 .done .row { margin-top: 16px; }
 .cap { text-transform: capitalize; }
 
-.skins { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin: 8px 0 12px; }
+.skins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 12px; }
 .skin {
   display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 12px; cursor: pointer;
   border: 2px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: .88rem;
@@ -337,6 +337,6 @@ details.intro summary { cursor: pointer; font-weight: 600; }
 .skin.on { border-color: var(--accent); font-weight: 700; }
 .swatch { display: flex; width: 56px; height: 24px; border-radius: 999px; overflow: hidden; border: 1px solid rgba(0, 0, 0, .12); }
 .swatch i { flex: 1; }
-.seg { display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 3px; }
-.seg button { border: none; background: none; font: inherit; font-weight: 600; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 36px; }
+.seg { display: flex; background: var(--surface-2); border-radius: 999px; padding: 3px; }
+.seg button { flex: 1; border: none; background: none; font: inherit; font-weight: 600; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 36px; }
 .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0, 0, 0, .1); }
